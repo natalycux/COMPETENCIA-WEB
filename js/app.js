@@ -48,10 +48,14 @@ async function cargarEncuesta(id) {
 
 // --- FUNCIÓN PARA ENVIAR RESPUESTAS (POST /Encuestas/responder) ---
 async function enviarRespuestas() {
-    // ... (El interior de esta función ya estaba correcto y no necesita cambios)
     const usuarioID = document.getElementById('usuarioID').value;
     if (!usuarioID) {
-        alert('Por favor, ingresa un ID de usuario.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Oops...', 
+            text: 'Por favor, ingresa un ID de usuario.',
+            confirmButtonColor: 'var(--primary-color)'
+        });
         return;
     }
 
@@ -62,7 +66,12 @@ async function enviarRespuestas() {
     }));
 
     if (respuestas.length === 0) {
-        alert('Debes seleccionar al menos una opción.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Espera',
+            text: 'Debes seleccionar al menos una opción.',
+            confirmButtonColor: 'var(--primary-color)'
+        });
         return;
     }
     
@@ -76,7 +85,13 @@ async function enviarRespuestas() {
         });
 
         if (response.ok) {
-            alert('¡Gracias por tus respuestas!');
+            Swal.fire({
+                icon: 'success',
+                title: '¡Gracias por tus respuestas!',
+                text: 'Tus respuestas han sido enviadas correctamente.',
+                showConfirmButton: false,
+                timer: 2000
+            });
             mostrarResumen(encuestaActivaId);
         } else {
             const errorData = await response.json();
@@ -84,10 +99,20 @@ async function enviarRespuestas() {
             if (errorData.errors) {
                 errorMsg += "\n" + Object.values(errorData.errors).flat().join("\n");
             }
-            alert(`Hubo un error al enviar tus respuestas:\n${errorMsg}`);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al enviar',
+                text: errorMsg,
+                confirmButtonColor: 'var(--danger-color)'
+            });
         }
     } catch (error) {
-        alert(`Error de conexión: ${error.message}`);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error de Conexión',
+            text: error.message,
+            confirmButtonColor: 'var(--danger-color)'
+        });
     }
 }
 

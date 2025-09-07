@@ -1,34 +1,219 @@
+/* --- Importación de Fuentes y Variables CSS --- */
+:root {
+    --primary-color: #4a00e0; /* Púrpura vibrante */
+    --secondary-color: #8e2de2; /* Lavanda */
+    --text-color: #333;
+    --text-muted-color: #6c757d;
+    --accent-color: #00c6ff;
+    --background-start: #f2f2f2; /* Gris muy claro */
+    --background-end: #e6e9f0;   /* Gris azulado claro */
+    --card-bg-color: rgba(255, 255, 255, 0.6); /* Glassmorphism más translúcido */
+    --card-border-color: rgba(255, 255, 255, 0.3);
+    --success-color: #20c997;
+    --warning-color: #fd7e14;
+    --danger-color: #e83e8c;
+    --font-family: 'Poppins', sans-serif;
+    --border-radius: 1rem;
+    --box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+/* --- Estilos Generales --- */
 body {
-    background-color: #f8f9fa;
+    font-family: var(--font-family);
+    background: linear-gradient(135deg, var(--background-start), var(--background-end));
+    background-size: 400% 400%;
+    color: var(--text-color);
+    line-height: 1.7;
+    overflow-x: hidden;
+    animation: gradientBG 15s ease infinite;
+}
+
+/* --- Estilos de Cabecera --- */
+.display-4 {
+    color: var(--primary-color);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- Tarjetas con Efecto Glassmorphism --- */
+.glass-card {
+    background: var(--card-bg-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--card-border-color);
+    box-shadow: var(--box-shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    animation: fadeIn 0.6s ease-out;
+    padding: 1.5rem;
+    transform-style: preserve-3d;
+}
+
+.glass-card:hover {
+    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+    box-shadow: 0 20px 50px 0 rgba(31, 38, 135, 0.2);
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--card-border-color);
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    padding: 1rem 1.5rem;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+}
+
+/* --- Estilos de Botones Personalizados --- */
+.btn-primary-custom, .btn-secondary-custom {
+    padding: 0.8rem 1.6rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-size: 200% auto;
+}
+
+.btn-primary-custom {
+    background-image: linear-gradient(to right, var(--primary-color) 0%, var(--secondary-color) 51%, var(--primary-color) 100%);
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-position: right center;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(74, 0, 224, 0.3);
+}
+
+.btn-secondary-custom {
+    background-image: linear-gradient(to right, #6c757d 0%, #343a40 51%, #6c757d 100%);
+    color: white;
+}
+
+.btn-secondary-custom:hover {
+    background-position: right center;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(52, 58, 64, 0.3);
+}
+
+.btn-primary-custom:active, .btn-secondary-custom:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Estilos de la Encuesta --- */
+#contenedor-encuesta .card-body, #contenedor-resumen .card-body {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .pregunta {
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 1.5rem;
-    margin-bottom: 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid #dee2e6;
+    margin-bottom: 1.5rem;
+    border-radius: 0.75rem;
+    border-left: 5px solid var(--accent-color);
+    animation: slideIn 0.5s forwards;
+    text-align: center;
 }
 
+.form-check-input {
+    width: 1.3em;
+    height: 1.3em;
+    margin-top: 0.3em;
+    cursor: pointer;
+    border-color: var(--primary-color);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-label {
+    margin-left: 0.75em;
+    cursor: pointer;
+    font-size: 1.05rem;
+}
+
+#usuarioID {
+    border-radius: 50px;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#usuarioID:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(74, 0, 224, 0.25);
+}
+
+.btn-success {
+    border-radius: 50px;
+    padding: 0.8rem;
+    font-weight: 600;
+    background-color: var(--success-color);
+    border: none;
+}
+
+/* --- Estilos del Resumen --- */
 .resumen-pregunta {
-    padding: 0.75rem;
-    border-left: 5px solid #ccc;
-    margin-bottom: 0.5rem;
-    transition: background-color 0.3s ease;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: white;
+    font-weight: 500;
+    animation: slideIn 0.5s forwards;
 }
 
 .resumen-pregunta:hover {
-    background-color: #f1f1f1;
+    transform: scale(1.03);
+    box-shadow: var(--box-shadow);
 }
 
-.resumen-verde { 
-    border-color: #198754; 
+.resumen-verde { background: linear-gradient(135deg, #28a745, #218838); }
+.resumen-amarillo { background: linear-gradient(135deg, #ffc107, #e0a800); }
+.resumen-rojo { background: linear-gradient(135deg, #dc3545, #c82333); }
+
+/* --- Footer --- */
+footer {
+    color: var(--text-muted-color);
 }
 
-.resumen-amarillo { 
-    border-color: #ffc107; 
+/* --- Animaciones --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.resumen-rojo { 
-    border-color: #dc3545; 
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- Responsividad --- */
+@media (max-width: 992px) {
+    .btn-group {
+        flex-direction: column;
+    }
+    .btn-group .btn {
+        margin-bottom: 10px;
+        border-radius: 50px !important;
+    }
+    .btn-group .btn:last-child {
+        margin-bottom: 0;
+    }
 }
