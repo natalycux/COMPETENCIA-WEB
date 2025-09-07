@@ -187,6 +187,15 @@ body {
 .resumen-amarillo { background: linear-gradient(135deg, #ffc107, #e0a800); }
 .resumen-rojo { background: linear-gradient(135deg, #dc3545, #c82333); }
 
+.resumen-pregunta-container {
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.resumen-pregunta-container canvas {
+    max-height: 200px;
+}
+
 /* --- Footer --- */
 footer {
     color: var(--text-muted-color);

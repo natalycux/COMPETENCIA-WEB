@@ -130,29 +130,75 @@ async function mostrarResumen(id) {
         if (!response.ok) throw new Error('Error al cargar el resumen.');
         const resumen = await response.json();
         
-        // CORRECCIÓN: Usamos .nombre, .preguntas
-        let html = `<div class="card-header"><h3>Resumen: ${resumen.nombre}</h3></div>`;
+        let html = `<div class="card-header"><h3>Resumen de la Encuesta ${id}</h3></div>`;
         html += `<div class="card-body">`;
 
-        resumen.preguntas.forEach(pregunta => {
-            // CORRECCIÓN: Usamos .porcentaje, .textoPregunta
-            let claseColor = '';
-            let emoji = '';
-            if (pregunta.porcentaje >= 60) {
-                claseColor = 'resumen-verde';
-                emoji = '✅';
-            } else if (pregunta.porcentaje >= 30) {
-                claseColor = 'resumen-amarillo';
-                emoji = '🟡';
-            } else {
-                claseColor = 'resumen-rojo';
-                emoji = '🔴';
-            }
-            html += `<div class="resumen-pregunta ${claseColor}"><p class="mb-0"><strong>${emoji} ${pregunta.porcentaje.toFixed(2)}%</strong> - ${pregunta.textoPregunta}</p></div>`;
+        resumen.preguntas.forEach((pregunta, index) => {
+            html += `
+                <div class="resumen-pregunta-container">
+                    <p class="text-center"><strong>${pregunta.textoPregunta}</strong></p>
+                    <canvas id="chart-${index}"></canvas>
+                </div>
+            `;
         });
         
         html += `</div>`;
         contenedorResumen.innerHTML = html;
+
+        // Registrar el plugin de datalabels
+        Chart.register(ChartDataLabels);
+
+        resumen.preguntas.forEach((pregunta, index) => {
+            const ctx = document.getElementById(`chart-${index}`).getContext('2d');
+            let color;
+            if (pregunta.porcentaje >= 60) {
+                color = '#28a745';
+            } else if (pregunta.porcentaje >= 30) {
+                color = '#ffc107';
+            } else {
+                color = '#dc3545';
+            }
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sí', 'No'],
+                    datasets: [{
+                        data: [pregunta.porcentaje, 100 - pregunta.porcentaje],
+                        backgroundColor: [color, '#e9ecef'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw.toFixed(2)}%`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                let sum = 0;
+                                let dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.map(data => {
+                                    sum += data;
+                                });
+                                let percentage = (value*100 / sum).toFixed(2) + '%';
+                                return percentage;
+                            },
+                            color: '#fff',
+                        }
+                    }
+                }
+            });
+        });
 
     } catch (error) {
          contenedorResumen.innerHTML = `<div class="card-body text-danger text-center"><strong>Error:</strong> ${error.message}</div>`;
