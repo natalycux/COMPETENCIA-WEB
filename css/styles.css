@@ -152,6 +152,11 @@ body {
     box-shadow: 0 0 0 0.25rem rgba(74, 0, 224, 0.25);
 }
 
+.usuario-id-input {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
 .btn-success {
     border-radius: 50px;
     padding: 0.8rem;

@@ -13,15 +13,19 @@ async function cargarEncuesta(id) {
         if (!response.ok) throw new Error('Error al cargar la encuesta.');
         const encuesta = await response.json();
 
-        // CORRECCIÓN: Usamos .nombre, .descripcion, .preguntas (en minúscula)
         let html = `<div class="card-header"><h3>${encuesta.nombre}</h3></div>`;
-        html += `<div class="card-body"><p>${encuesta.descripcion}</p>`;
+        html += `<div class="card-body">`;
+        html += `<p>${encuesta.descripcion}</p>`;
+        html += `
+            <div class="mb-4">
+                <input type="text" id="usuarioID" class="form-control usuario-id-input" placeholder="Ingresa tu ID de usuario (ej: ncuxr)">
+            </div>
+        `;
 
+        html += `<div class="preguntas-container">`;
         encuesta.preguntas.forEach(pregunta => {
-            // CORRECCIÓN: Usamos .textoPregunta, .opciones
             html += `<div class="pregunta"><h5>${pregunta.textoPregunta}</h5>`;
             pregunta.opciones.forEach(opcion => {
-                // CORRECCIÓN: Usamos .opcionID, .textoOpcion
                 html += `
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="${opcion.opcionID}" id="opcion-${opcion.opcionID}">
@@ -31,11 +35,11 @@ async function cargarEncuesta(id) {
             });
             html += `</div>`;
         });
+        html += `</div>`;
 
         html += `
-            <div class="mt-3">
-                <input type="text" id="usuarioID" class="form-control" placeholder="Ingresa tu ID de usuario (ej: ncuxr)">
-                <button class="btn btn-success w-100 mt-2" onclick="enviarRespuestas()">Enviar Respuestas</button>
+            <div class="mt-4">
+                <button class="btn btn-success w-100" onclick="enviarRespuestas()">Enviar Respuestas</button>
             </div>
         `;
         html += `</div>`;
